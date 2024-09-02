@@ -1,0 +1,69 @@
+/* Reset and global styles */
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  position: relative;
+  z-index: 1;
+  padding: 20px;
+}
+
+.login-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.login-background video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.login-card {
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius: 10px;
+  border: 2px solid #1890ff; /* Blue border */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .login-card {
+    max-width: 300px;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 10px;
+  }
+
+  .login-card {
+    max-width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .login-background video {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+}

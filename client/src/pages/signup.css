@@ -1,0 +1,71 @@
+/* Reset and global styles */
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f2f5; /* Light grey background */
+    padding: 20px;
+  }
+  
+  .signup-card {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    border: 1px solid #1890ff; /* Blue border */
+  }
+  
+  .signup-card .ant-card-head {
+    background-color: #1890ff; /* Blue header */
+    color: white;
+    text-align: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+  
+  .signup-card .ant-card-head-title {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .ant-form-item {
+    margin-bottom: 15px;
+  }
+  
+  .ant-form-item-label > label {
+    font-weight: bold;
+  }
+  
+  .ant-input,
+  .ant-select-selector,
+  .ant-input-password {
+    border-radius: 5px;
+    padding: 10px;
+  }
+  
+  .ant-btn-primary {
+    background-color: #1890ff;
+    border-color: #1890ff;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 5px;
+  }
+  
+  .ant-btn-primary:hover {
+    background-color: #40a9ff;
+    border-color: #40a9ff;
+  }
+  
+  .ant-btn-primary:active,
+  .ant-btn-primary:focus {
+    background-color: #096dd9;
+    border-color: #096dd9;
+  }
+  

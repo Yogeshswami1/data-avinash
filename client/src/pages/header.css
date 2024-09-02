@@ -1,0 +1,50 @@
+.header-container {
+    background-color: #1890ff; /* Dark blue background */
+    color: #fff; /* White text */
+    padding: 15px 20px;
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: auto;
+    z-index: 1000; /* Ensure it stays on top */
+    border-bottom-left-radius: 20px; /* Rounded bottom left corner */
+    border-bottom-right-radius: 20px; /* Rounded bottom right corner */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  }
+  
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .company-name {
+    font-size: 24px;
+    margin: 0;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .header-container {
+      padding: 10px 15px;
+      border-bottom-left-radius: 15px; /* Adjusted rounded corners for smaller screens */
+      border-bottom-right-radius: 15px;
+    }
+  
+    .company-name {
+      font-size: 20px; /* Slightly smaller font size for tablets */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .header-container {
+      padding: 8px 10px;
+      border-bottom-left-radius: 10px; /* Further adjustment for mobile */
+      border-bottom-right-radius: 10px;
+    }
+  
+    .company-name {
+      font-size: 18px; /* Smaller font size for mobile devices */
+    }
+  }
+  
