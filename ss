@@ -1,0 +1,39 @@
+sudo nano /etc/nginx/sites-available/dataavi-backend.saumic.com
+
+server {
+    listen 80;
+    server_name dataavi-backend.saumic.com;
+
+    location / {
+        proxy_pass http://localhost:8000;  # Assuming your Node.js app is running on port 3000
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    error_log /var/log/nginx/dataavi-backend.saumic.com.error.log;
+    access_log /var/log/nginx/dataavi-backend.saumic.comh.access.log;
+}
+
+sudo ln -s /etc/nginx/sites-available/dataavi-backend.saumic.com /etc/nginx/sites-enabled/
+
+    sudo nano /etc/nginx/sites-available/dataavi-frontend.saumic.com
+
+server {
+    listen 80;
+    server_name dataavi-frontend.saumic.com; #  Replace it with your own domain 
+
+    root /var/www/html/data_project/client/build; # Replace with the path to your build directory
+    index index.html;
+
+    location / {
+        try_files $uri /index.html;
+    }
+
+    error_log /var/log/nginx/dataavi-frontend.saumic.com.error.log;
+    access_log /var/log/nginx/dataavi-frontend.saumic.com.access.log;
+}
+
+sudo ln -s /etc/nginx/sites-available/dataavi-frontend.saumic.com /etc/nginx/sites-enabled/
