@@ -414,6 +414,7 @@ const List = () => {
   const [searchText, setSearchText] = useState(''); // New state for search text
   const [dateRange, setDateRange] = useState([]); // Initialize as empty array
   const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -440,38 +441,114 @@ const List = () => {
 
   // Function to handle search
   // Function to handle search
+  // const handleSearch = (value) => {
+  //   const searchValue = value.toLowerCase();
+  //   console.log('Search Value:', searchValue);
+  //   console.log('Selected Month:', selectedMonth ? selectedMonth.format('MM/YYYY') : 'None');
+  
+  //   const newFilteredData = data.filter(item => {
+  //     const isDateRangeValid = Array.isArray(dateRange) && dateRange.length === 2;
+  //     const isMonthSelected = selectedMonth !== null;
+  //     const itemDate = moment(item.date);
+  
+  //     console.log('Item Date:', itemDate.format('YYYY-MM-DD'));
+  
+  //     // Check if the item is within the selected date range
+  //     const isWithinDateRange = !isDateRangeValid || (
+  //       itemDate.isSameOrAfter(dateRange[0], 'day') && itemDate.isSameOrBefore(dateRange[1], 'day')
+  //     );
+  
+  //     // Check if the item is within the selected month
+  //     const isWithinSelectedMonth = !isMonthSelected || (
+  //       itemDate.year() === selectedMonth.year() &&
+  //       itemDate.month() === selectedMonth.month()
+  //     );
+  
+  //     console.log('Is Within Date Range:', isWithinDateRange);
+  //     console.log('Is Within Selected Month:', isWithinSelectedMonth);
+  
+  //     // Ensure properties are defined before calling toLowerCase
+  //     const itemName = item.name ? item.name.toLowerCase() : '';
+  //     const itemUsername = item.username ? item.username.toLowerCase() : '';
+  //     const itemEmail = item.email ? item.email.toLowerCase() : '';
+  //     const itemPrimaryContact = item.primaryContact ? item.primaryContact.toLowerCase() : '';
+  //     const itemManager = item.manager ? item.manager.toLowerCase() : '';
+  //     const itemService = item.service ? item.service.toLowerCase() : '';
+  
+  //     return (
+  //       (
+  //         itemName.includes(searchValue) ||
+  //         itemUsername.includes(searchValue) ||
+  //         itemEmail.includes(searchValue) ||
+  //         itemPrimaryContact.includes(searchValue) ||
+  //         itemManager.includes(searchValue) ||
+  //         itemService.includes(searchValue)
+  //       ) &&
+  //       isWithinDateRange &&
+  //       isWithinSelectedMonth
+  //     );
+  //   });
+  
+  //   setFilteredData(newFilteredData);
+  // };
+  
   const handleSearch = (value) => {
+    console.log("Search Value:", value); // Debugging line
+  
     const searchValue = value.toLowerCase();
+    const isDateRangeSearch = /(\d{2}\/\d{2}\/\d{4})\s+to\s+(\d{2}\/\d{2}\/\d{4})/.test(searchValue);
+  
+    const isDateRangeValid = Array.isArray(dateRange) && dateRange.length === 2;
+    const isMonthSelected = selectedMonth !== null;
+    const isYearSelected = selectedYear !== null;
   
     const newFilteredData = data.filter(item => {
-      const isDateRangeValid = Array.isArray(dateRange) && dateRange.length === 2;
       const itemDate = moment(item.date);
+      const itemYear = itemDate.year();
+      const itemMonth = itemDate.month(); // 0-based month (0 = January, 11 = December)
+      const itemFormattedDate = itemDate.format('DD/MM/YYYY');
+  
+      // Date range search logic
+      let isInDateRange = false;
+      if (isDateRangeSearch) {
+        const [startDateStr, endDateStr] = searchValue.match(/(\d{2}\/\d{2}\/\d{4})\s+to\s+(\d{2}\/\d{2}\/\d{4})/).slice(1);
+        const startDate = moment(startDateStr, 'DD/MM/YYYY');
+        const endDate = moment(endDateStr, 'DD/MM/YYYY');
+        isInDateRange = itemDate.isBetween(startDate, endDate, 'day', '[]'); // inclusive of start and end dates
+      }
+  
+      // Check if searchValue is a valid year
+      const isYearSearch = /^\d{4}$/.test(searchValue);
   
       const isWithinDateRange = !isDateRangeValid || (
         itemDate.isSameOrAfter(dateRange[0], 'day') && itemDate.isSameOrBefore(dateRange[1], 'day')
       );
   
-      // Ensure properties are defined before calling toLowerCase
-      const itemName = item.name ? item.name.toLowerCase() : '';
-      const itemUsername = item.username ? item.username.toLowerCase() : '';
-      const itemEmail = item.email ? item.email.toLowerCase() : '';
-      const itemPrimaryContact = item.primaryContact ? item.primaryContact.toLowerCase() : '';
-      const itemManager = item.manager ? item.manager.toLowerCase() : '';
-      const itemService = item.service ? item.service.toLowerCase() : '';
-  
       return (
-        itemName.includes(searchValue) ||
-        itemUsername.includes(searchValue) ||
-        itemEmail.includes(searchValue) ||
-        itemPrimaryContact.includes(searchValue) ||
-        itemManager.includes(searchValue) ||
-        itemService.includes(searchValue) &&
-        isWithinDateRange
+        (item.name?.toLowerCase().includes(searchValue) ||
+        item.username?.toLowerCase().includes(searchValue) ||
+        item.email?.toLowerCase().includes(searchValue) ||
+        item.primaryContact?.toLowerCase().includes(searchValue) ||
+        item.manager?.toLowerCase().includes(searchValue) ||
+        item.service?.toLowerCase().includes(searchValue) ||
+        item.enrollmentId?.toLowerCase().includes(searchValue) ||
+        isYearSearch && itemYear === parseInt(searchValue) ||
+        isInDateRange) &&
+        isWithinDateRange &&
+        (!isMonthSelected || itemMonth === selectedMonth.month()) &&
+        (!isYearSelected || itemYear === selectedYear.year())
       );
     });
   
     setFilteredData(newFilteredData);
   };
+  
+  
+  
+  
+  
+  
+  
   
 
 
@@ -593,7 +670,21 @@ const List = () => {
         message.error('Failed to delete selected enrollments');
       });
   };
-
+  const handleMonthChange = (date) => {
+    if (date) {
+      setSelectedMonth(date.startOf('month'));
+    } else {
+      setSelectedMonth(null);
+    }
+  };
+  const handleYearChange = (date) => {
+    if (date) {
+      setSelectedYear(date.year());
+    } else {
+      setSelectedYear(null);
+    }
+  };
+  
   const columns = [
     {
       title: 'Enrollment ID',
@@ -677,19 +768,26 @@ const List = () => {
           </Space>
         </Card>
         
-        <Card title="Date and Month Filter" className="filter-card">
-          <Space>
-            <RangePicker
-              onChange={(dates, dateStrings) => setDateRange(dates)}
-              format="DD/MM/YYYY"
-            />
-            {/* <DatePicker
-              picker="month"
-              onChange={(date, dateString) => setSelectedMonth(date)}
-              format="MM/YYYY"
-            /> */}
-          </Space>
-        </Card>
+        <Card title="Filters" className="filter-card">
+  <Space>
+  {/* <RangePicker
+  onChange={(dates, dateStrings) => {
+    setDateRange(dates);
+  }}
+  format="DD/MM/YYYY"
+/> */}
+
+    <DatePicker
+      picker="month"
+      onChange={handleMonthChange}
+      format="MM/YYYY"
+    />
+ 
+
+  </Space>
+</Card>
+
+
 
         <Card title="Enrollment List" className="table-card">
           <Space style={{ marginBottom: 16 }}>
@@ -706,12 +804,13 @@ const List = () => {
           </Space>
 
           <Input.Search
-            placeholder="Search by Enrollment ID, Name, Email, or Contact"
-            allowClear
-            enterButton="Search"
-            onSearch={setSearchText}
-            style={{ marginBottom: 16 }}
-          />
+  placeholder="Search by Enrollment ID, Name, Email, Contact, or Year"
+  allowClear
+  enterButton="Search"
+  onSearch={handleSearch}
+  style={{ marginBottom: 16 }}
+/>
+
 
           <Table
             columns={columns}

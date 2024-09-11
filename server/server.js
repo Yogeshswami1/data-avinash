@@ -82,6 +82,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const dotenv = require('dotenv');
+const enrollRoutes = require('./routes/enrollment');
+const enrollmentRoutes = require('./routes/enrollment');
+const authRoutes = require('./routes/auth');
 
 // Load environment variables from .env file
 dotenv.config();
@@ -90,7 +93,9 @@ const app = express();
 
 // CORS configuration
 const corsOptions = {
-  origin: 'https://datafrontend.saumic.com', // Replace with your frontend domain
+  // origin: 'https://datafrontend.saumic.com', // Replace with your frontend domain
+  origin: 'http://localhost:3000', //   Replace with your frontend domain
+
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
@@ -115,12 +120,13 @@ mongoose.connect(process.env.MONGO_URI, {
 });
 
 // Import routes
-const authRoutes = require('./routes/auth');
-const enrollRoutes = require('./routes/enrollment');
+
 
 // Use routes
 app.use('/api/auth', authRoutes);
-app.use('/api/enroll', enrollRoutes); // Changed endpoint to avoid conflicts
+app.use('/api', enrollRoutes);
+app.use('/api', enrollmentRoutes);
+
 
 // Serve frontend application
 app.use(express.static(path.join(__dirname, 'public')));
@@ -129,6 +135,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
   res.status(404).send('Not Found');
 });
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
