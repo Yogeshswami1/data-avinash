@@ -1,8 +1,10 @@
-sudo nano /etc/nginx/sites-available/databackendweb.saumic.com
+sudo nano /etc/nginx/sites-available/databackweb.saumic.com
+
+
 
 server {
     listen 80;
-    server_name databackendweb.saumic.com;
+    server_name databackweb.saumic.com;
 
     location / {
         proxy_pass http://localhost:9000;  # Assuming your Node.js app is running on port 3000
@@ -13,30 +15,30 @@ server {
         proxy_cache_bypass $http_upgrade;
     }
 
-    error_log /var/log/nginx/databackendweb.saumic.com.error.log;
-    access_log /var/log/nginx/databackendweb.saumic.com.h.access.log;
+    error_log /var/log/nginx/databackweb.saumic.comm.error.log;
+    access_log /var/log/nginx/databackweb.saumic.com.h.access.log;
 }
 
-sudo ln -s /etc/nginx/sites-available/databackendweb.saumic.com /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/databackweb.saumic.com /etc/nginx/sites-enabled/
 
-    sudo nano /etc/nginx/sites-available/dataavi-frontend.saumic.com
+    sudo nano /etc/nginx/sites-available/data.saumic.com
 
 server {
     listen 80;
-    server_name dataavi-frontend.saumic.com; #  Replace it with your own domain 
+    server_name data.saumic.com; #  Replace it with your own domain 
 
-    root /var/www/html/data_project/client/build; # Replace with the path to your build directory
+    root /var/www/html/data/client/build; # Replace with the path to your build directory
     index index.html;
 
     location / {
         try_files $uri /index.html;
     }
 
-    error_log /var/log/nginx/dataavi-frontend.saumic.com.error.log;
-    access_log /var/log/nginx/dataavi-frontend.saumic.com.access.log;
+    error_log /var/log/nginx/data.saumic.com.error.log;
+    access_log /var/log/nginx/data.saumic.com.access.log;
 }
 
-sudo ln -s /etc/nginx/sites-available/dataavi-frontend.saumic.com /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/data.saumic.com /etc/nginx/sites-enabled/
 
 
 
@@ -80,3 +82,7 @@ server {
     error_log /var/log/nginx/datafrontend.saumic.com.log;
     access_log /var/log/nginx/datafrontend.saumic.com.log;
 }
+
+
+sudo certbot --nginx -d data.saumic.com -d databackweb.saumic.com
+
