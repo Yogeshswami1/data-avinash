@@ -93,8 +93,10 @@ const app = express();
 
 // CORS configuration
 const corsOptions = {
-  origin: 'https://data.saumic.com', // Replace with your frontend domain
+  // origin: 'https://data.saumic.com', // Replace with your frontend domain
   // origin: 'http://localhost:3000', //   Replace with your frontend domain
+  origin: 'http://datas.saumic.com', // Replace with your frontend domain
+
 
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
