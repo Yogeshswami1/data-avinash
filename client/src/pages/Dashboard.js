@@ -197,7 +197,7 @@ import sample from './Sample.csv';
 import Footer from './Footer';
 import Header from './Header';
 import video from './bg.mp4';
-
+import Graph from "./Graph.js";
 const { Option } = Select;
 const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
@@ -276,6 +276,7 @@ const Dashboard = () => {
         </Row>
 
         <Card title="Welcome Admin" className="dashboard-card">
+          <Graph/>
           <Form
             form={form}
             name="enrollment"

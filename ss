@@ -130,3 +130,7 @@ server {
     error_log /var/log/nginx/datas.saumic.com;
     access_log /var/log/nginx/datas.saumic.com;
 }
+
+sudo ln -s /etc/nginx/sites-available/datas.saumic.com /etc/nginx/sites-enabled/
+
+sudo certbot --nginx -d datas.saumic.com -d datasbackend.saumic.com
