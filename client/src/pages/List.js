@@ -510,6 +510,10 @@ const List = () => {
  const [selectedYear, setSelectedYear] = useState(null);
  const [showAmazonWebsiteTable, setShowAmazonWebsiteTable] = useState(false); // New state to toggle table visibility
  const [amazonWebsiteData, setAmazonWebsiteData] = useState([]); // New state for AMAZON_WEBSITE data
+ const [isAmazonOnly, setIsAmazonOnly] = useState(false); // State to toggle Amazon-only filter
+ const [isWebsiteOnly, setIsWebsiteOnly] = useState(false); // State to toggle Website-only filter
+
+
 
 
 
@@ -668,6 +672,46 @@ const List = () => {
  //     setFilteredData(filtered);
  //   }
  // };
+
+
+
+
+  // Amazon-only filter function
+  const handleAmazonOnlyFilter = () => {
+   const amazonEntries = data.filter(item => item.service === 'AMAZON');
+   const websiteEntries = data.filter(item => item.service === 'WEBSITE');
+   const websiteContacts = new Set(websiteEntries.map(item => item.primaryContact));
+
+
+   // Filter Amazon entries where primaryContact is not in websiteContacts
+   const amazonOnly = amazonEntries.filter(item => !websiteContacts.has(item.primaryContact));
+  
+   setFilteredData(amazonOnly);
+   setIsAmazonOnly(true); // Set Amazon-only flag to true
+ };
+
+
+  // Website-only filter function
+  const handleWebsiteOnlyFilter = () => {
+   const websiteEntries = data.filter(item => item.service === 'WEBSITE');
+   const amazonEntries = data.filter(item => item.service === 'AMAZON');
+   const amazonContacts = new Set(amazonEntries.map(item => item.primaryContact));
+
+
+   // Filter Amazon entries where primaryContact is not in websiteContacts
+   const websiteOnly = websiteEntries.filter(item => !amazonContacts.has(item.primaryContact));
+  
+   setFilteredData(websiteOnly);
+   setIsWebsiteOnly(true); // Set Amazon-only flag to true
+ };
+
+
+ // Reset filter to show all data
+ const resetFilter = () => {
+   setFilteredData(data);
+   setIsAmazonOnly(false);
+   setIsWebsiteOnly(false);
+ };
 
 
 
@@ -833,6 +877,11 @@ const List = () => {
            <Button key="AMAZON_WEBSITE" onClick={() => handleFilter('AMAZON_WEBSITE')}>
              AMAZON & WEBSITE
            </Button>
+          
+         <Button onClick={handleAmazonOnlyFilter}>Amazon Only</Button>
+         <Button onClick={handleWebsiteOnlyFilter}>Website Only</Button>
+         <Button onClick={resetFilter}>Reset Filter</Button>
+      
          </Space>
        </Card>
      
